@@ -1,0 +1,135 @@
+<ul class="list-group">
+
+  <li class="list-group-item header">
+    <input class="input-area" type="text" placeholder="Book Name" [(ngModel)]="book.name"/>
+    <button class="add-button btn-primary" (click)="showBookModal()">Add</button>
+  </li>
+  
+  <li class="list-group-item" *ngFor="let book of bookList | async">
+    <label  role="button" (click)="openBookDetails(book.$key)">{{book.name}}</label>
+  </li>
+
+</ul>
+
+<app-modal #bookModal>
+    <div class="app-modal-header">
+      <h2><b>Book</b></h2>
+    </div>
+    <div class="app-modal-body">
+
+      <app-spinner *ngIf="bookEditMode" #spinner></app-spinner>
+
+      <form #bookForm="ngForm">
+
+        <div class="form-group">
+          <label for="author">Author</label>
+          <select class="form-control" id="author" required [(ngModel)]="book.author" name="author">
+            <option *ngFor="let author of authorList | async" [value]="author.$key">{{author.name}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="language">Language</label>
+          <select class="form-control" id="language" required [(ngModel)]="book.language" name="language">
+            <option *ngFor="let language of languageList | async" [value]="language.$key">{{language.name}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select class="form-control" id="category" required [(ngModel)]="book.category" name="category">
+            <option *ngFor="let category of categoryList | async" [value]="category.$key">{{category.name}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="media">Type</label>
+          <select class="form-control" id="media" required [(ngModel)]="book.media" name="media">
+            <option *ngFor="let media of mediaList" [value]="media.value">{{media.name}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="reader">Who can read this?</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="reader" [(ngModel)]="readerText" name="reader">
+            <span role="button" class="input-group-addon" (click)="addReader()">Add</span>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let item of book.reader">
+              <span *ngIf="!bookEditMode">{{item}}</span>
+              <div *ngIf="bookEditMode" class="input-group">
+                <span>{{item}}</span>
+                <span role="button" class="input-group-addon glyphicon glyphicon-remove" (click)="deleteReader(item)"></span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="form-group">
+          <label for="about">About</label>
+          <input type="text" class="form-control" id="about" required [(ngModel)]="book.about" name="about">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input type="text" class="form-control" id="description" required [(ngModel)]="book.description" name="description">
+        </div>
+
+        <div class="form-group">
+          <label for="image">Cover image</label>
+          <input #imageInput type="file" class="form-control"  accept="image/png, image/jpeg" id="image" required name="image"  (change)="selectImage($event.target.files[0])">
+        </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer">
+      <button type="button" class="btn btn-default" (click)="hideBookModal()">Close</button>
+      <button *ngIf="!bookEditMode" type="button" class="btn btn-primary" [disabled]="!bookForm.form.valid" (click)="showContentModal()">Next</button>
+      <button *ngIf="bookEditMode" type="button" class="btn btn-delete" (click)="deleteBook()">Delete</button>
+      <button *ngIf="bookEditMode" type="button" class="btn btn-primary" [disabled]="!bookForm.form.valid" (click)="showEditContentModal()">Next</button>
+      <button *ngIf="bookEditMode" type="button" class="btn btn-success" [disabled]="!bookForm.form.valid" (click)="updateBook()">Update</button>
+    </div>
+</app-modal>
+
+<app-modal #contentModal>
+    <div class="app-modal-header">
+      <h2 *ngIf="!contentEditMode"><b>Page {{contentList.length+1}}</b></h2>
+      <h2 *ngIf="contentEditMode"><b>Page {{content.page}}</b></h2>
+    </div>
+    <div class="app-modal-body">
+
+      <app-spinner #spinner></app-spinner>
+      
+      <form #contentForm="ngForm">
+
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" class="form-control" id="title" required [(ngModel)]="content.title" name="title">
+        </div>
+
+        <div class="form-group">
+          <label for="text">Text</label>
+          <textarea type="text" class="form-control" id="text" required [(ngModel)]="content.text" name="text"></textarea>
+        </div>
+
+        <div class="form-group" *ngIf="book.media > 1">
+          <label for="audio">Audio</label>
+          <input #audioInput type="file" class="form-control"  accept="audio/mp3" id="audio" required name="audio"  (change)="selectAudio($event.target.files[0])">
+        </div>
+
+        <div class="form-group" *ngIf="book.media > 2">
+          <label for="video">Video</label>
+          <input #videoInput type="file" class="form-control"  accept="video/mp4, video/3gp" id="video" required name="video"  (change)="selectVideo($event.target.files[0])">
+        </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer">
+      <button type="button" class="btn btn-default" (click)="hideContentModal()">Close</button>
+      <button *ngIf="!contentEditMode" type="button" class="btn btn-primary" [disabled]="!contentForm.form.valid" (click)="addPages()">Next</button>
+      <button *ngIf="!contentEditMode" type="button" class="btn btn-success" [disabled]="contentList.length==0" (click)="saveBook()">Save</button>
+      <button *ngIf="contentEditMode && content.page != book.content.length " type="button" class="btn btn-primary" [disabled]="!contentForm.form.valid" (click)="showNextEditContentModal()">Next</button>
+      <button *ngIf="contentEditMode" type="button" class="btn btn-success" [disabled]="!contentForm.form.valid" (click)="updateBookContent()">Update</button>
+    </div>
+</app-modal>

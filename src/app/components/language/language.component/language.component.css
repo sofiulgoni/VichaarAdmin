@@ -1,0 +1,11 @@
+.header{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.add-button {
+    float: right;
+    width: 20%;
+}
+.input-area{
+    width: 60%;
+}

@@ -1,0 +1,78 @@
+<ul class="list-group">
+
+  <li class="list-group-item header">
+    <input class="input-area" type="text" placeholder="Curated Name" [(ngModel)]="editor.name"/>
+    <button class="add-button btn-primary" (click)="showEditorModal()">Add</button>
+  </li>
+
+  <li class="list-group-item" *ngFor="let editor of editorList | async">
+    <label role="button" (click)="openEditorDetails(editor.$key)">{{editor.name}}</label>
+  </li>
+
+</ul>
+
+<app-modal #editorModal>
+    <div class="app-modal-header">
+      <h2><b>Curated</b></h2>
+    </div>
+    <div class="app-modal-body">
+
+      <app-spinner #spinner></app-spinner>
+
+      <form #editorForm="ngForm">
+
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" required [(ngModel)]="editor.name" name="name">
+        </div>
+
+        <div class="form-group">
+          <label for="about">Description</label>
+          <input type="text" class="form-control" id="about" required [(ngModel)]="editor.about" name="about">
+        </div>
+
+        <div class="form-group">
+          <label for="language">Language</label>
+          <select class="form-control" id="language" required [(ngModel)]="editor.language" name="language">
+            <option *ngFor="let language of languageList | async" [value]="language.$key">{{language.name}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="editor">Editor Name</label>
+          <input type="text" class="form-control" id="editor" required [(ngModel)]="editor.editorName" name="editor">
+        </div>
+
+        <div class="form-group">
+          <label for="image">Cover image</label>
+          <input #imageInputCover type="file" class="form-control"  accept="image/png, image/jpeg" id="image" required name="image"  (change)="selectImage($event.target.files[0])">
+        </div>
+
+        <div class="form-group">
+          <label for="books">Add Books</label>
+          <div class="input-group">
+            <select class="form-control" id="books" [(ngModel)]="book" name="books">
+              <option *ngFor="let book of bookList | async" [value]="book.$key">{{book.name}}</option>
+            </select>
+            <span role="button" class="input-group-addon" (click)="addBooks()">Add</span>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let book of editor.books">
+              <span *ngIf="!editMode">{{getBookName(book)}}</span>
+              <div *ngIf="editMode" class="input-group">
+                <span>{{getBookName(book)}}</span>
+                <span role="button" class="input-group-addon glyphicon glyphicon-remove" (click)="deleteBook(book)"></span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer">
+      <button type="button" class="btn btn-primary" (click)="hideEditorModal()">Cancel</button>
+      <button *ngIf="editMode" type="button" class="btn btn-delete" (click)="deleteEditor()">Delete</button>
+      <button *ngIf="!editMode" type="button" class="btn btn-success" [disabled]="!editorForm.form.valid" (click)="saveEditor()">Save</button>
+      <button *ngIf="editMode" type="button" class="btn btn-success" [disabled]="!editorForm.form.valid" (click)="updateEditor()">Update</button>
+    </div>
+</app-modal>

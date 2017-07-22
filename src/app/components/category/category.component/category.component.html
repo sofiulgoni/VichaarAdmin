@@ -1,0 +1,32 @@
+<ul class="list-group">
+
+  <li class="list-group-item header">
+    <input class="input-area" type="text" placeholder="Category Name" [(ngModel)]="category.name"/>
+    <button class="add-button btn-primary" (click)="addCategory()">Add</button>
+  </li>
+
+  <li class="list-group-item" *ngFor="let category of categoryList | async">
+    <label role="button" (click)="openCategoryDetails(category.$key)">{{category.name}}</label>
+  </li>
+
+</ul>
+
+<app-modal #editModal>
+    <div class="app-modal-header">
+      <h2><b>Category</b></h2>
+    </div>
+    <div class="app-modal-body">
+      <form #editForm="ngForm">
+
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" required [(ngModel)]="category.name" name="name">
+        </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer">
+      <button type="button" class="btn btn-default" (click)="hideEditModal()">Close</button>
+      <button type="button" class="btn btn-primary" [disabled]="!editForm.form.valid" (click)="updateCategory()">Update</button>
+    </div>
+</app-modal>

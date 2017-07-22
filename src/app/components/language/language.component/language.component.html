@@ -1,0 +1,12 @@
+<ul class="list-group">
+
+  <li class="list-group-item header">
+    <input class="input-area" type="text" placeholder="Language" [(ngModel)]="language.name"/>
+    <button class="add-button btn-primary" (click)="addLanguage()">Add</button>
+  </li>
+
+  <li class="list-group-item" *ngFor="let language of languageList | async">
+    <label role="button" (click)="openLanguageDetails(language.$key)">{{language.name}}</label>
+  </li>
+
+</ul>

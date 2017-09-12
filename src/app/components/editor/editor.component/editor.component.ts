@@ -49,6 +49,7 @@ export class EditorComponent implements OnInit {
 
   public showEditorModal(){
     if(this.editor.name != undefined && this.editor.name != ""){
+	  this.editor.editorName = "Gistist";
       this.editorModal.show();
     }
   }
@@ -112,7 +113,9 @@ export class EditorComponent implements OnInit {
         console.log(error);
         this.spinner.hide();
       });
-    }
+    }else{
+	  alert("All fields required");
+	}
   }
 
   private getDate(){
@@ -135,7 +138,9 @@ export class EditorComponent implements OnInit {
         console.log(error);
         this.spinner.hide();
       });
-    }
+    }else{
+	  alert("All fields required");
+	}
   }
 
   public deleteEditor(){

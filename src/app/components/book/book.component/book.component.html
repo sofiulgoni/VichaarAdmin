@@ -2,7 +2,7 @@
 
   <li class="list-group-item header">
     <input class="input-area" type="text" placeholder="Book Name" [(ngModel)]="book.name"/>
-    <button class="add-button btn-primary" (click)="showBookModal()">Add</button>
+    <button class="btn-primary" (click)="showBookModal()">Add</button>
   </li>
   
   <li class="list-group-item" *ngFor="let book of bookList | async">
@@ -43,9 +43,16 @@
         </div>
 
         <div class="form-group">
-          <label for="media">Type</label>
+          <label for="media">Content Type</label>
           <select class="form-control" id="media" required [(ngModel)]="book.media" name="media">
             <option *ngFor="let media of mediaList" [value]="media.value">{{media.name}}</option>
+          </select>
+        </div>
+		
+		<div class="form-group">
+          <label for="media">Book Type</label>
+          <select class="form-control" id="type" required [(ngModel)]="book.type" name="type">
+            <option *ngFor="let type of typeList" [value]="type.value">{{type.name}}</option>
           </select>
         </div>
 

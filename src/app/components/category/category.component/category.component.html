@@ -2,7 +2,7 @@
 
   <li class="list-group-item header">
     <input class="input-area" type="text" placeholder="Category Name" [(ngModel)]="category.name"/>
-    <button class="add-button btn-primary" (click)="addCategory()">Add</button>
+    <button class="btn-primary" (click)="addCategory()">Add</button>
   </li>
 
   <li class="list-group-item" *ngFor="let category of categoryList | async">

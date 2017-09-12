@@ -30,6 +30,7 @@ export class BookComponent implements OnInit {
   content = new Content();
   contentList = [];
   mediaList = [ {name:"Text", value:1}, {name:"Audio", value:2}, {name:"Video", value:3} ];
+  typeList  = [ {name:"Free", value:1}, {name:"Premium", value:2} ];
   bookEditMode = false;
   contentEditMode = false;
   contentPageCount = 0;
@@ -220,11 +221,19 @@ export class BookComponent implements OnInit {
 
   private getDate(){
     var dateObj = new Date();
-    var month = dateObj.getUTCMonth() + 1;
-    var day = dateObj.getUTCDate();
+    var month = this.getDoubleNumber((dateObj.getUTCMonth() + 1).toString());
+    var day = this.getDoubleNumber((dateObj.getUTCDate()).toString());
     var year = dateObj.getUTCFullYear();
     var date = year.toString() + month.toString() + day.toString();
     return parseInt(date);
+  }
+  
+  private getDoubleNumber(number){
+    if(number.length < 2){
+      return "0"+number;
+    }else{
+      return number;
+    }
   }
 
   private clearFileInput(){

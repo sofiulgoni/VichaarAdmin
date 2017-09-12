@@ -26,6 +26,7 @@ export class LanguageComponent implements OnInit {
   public addLanguage(){
     if(this.language.name != ""){
       this.firebase.addLanguage(this.language);
+	  this.language = new Language();
     }
   }
 

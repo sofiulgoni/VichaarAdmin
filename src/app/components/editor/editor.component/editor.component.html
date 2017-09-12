@@ -2,7 +2,7 @@
 
   <li class="list-group-item header">
     <input class="input-area" type="text" placeholder="Curated Name" [(ngModel)]="editor.name"/>
-    <button class="add-button btn-primary" (click)="showEditorModal()">Add</button>
+    <button class="btn-primary" (click)="showEditorModal()">Add</button>
   </li>
 
   <li class="list-group-item" *ngFor="let editor of editorList | async">
@@ -69,8 +69,8 @@
 
         </form>
     </div>
-    <div class="app-modal-footer">
-      <button type="button" class="btn btn-primary" (click)="hideEditorModal()">Cancel</button>
+    <div class="app-modal-footer"> 
+      <button type="button" class="btn btn-default" (click)="hideEditorModal()">Close</button>
       <button *ngIf="editMode" type="button" class="btn btn-delete" (click)="deleteEditor()">Delete</button>
       <button *ngIf="!editMode" type="button" class="btn btn-success" [disabled]="!editorForm.form.valid" (click)="saveEditor()">Save</button>
       <button *ngIf="editMode" type="button" class="btn btn-success" [disabled]="!editorForm.form.valid" (click)="updateEditor()">Update</button>
